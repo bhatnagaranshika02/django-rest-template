@@ -8,5 +8,5 @@ This script sets up a basic Django REST API project.
 bash django-rest-setup.sh
 ```
 ## Requirements
-* [Python3](https://www.python.org/downloads/)
+* [python3](https://www.python.org/downloads/)
 * [pip](https://pypi.org/project/pip/)
