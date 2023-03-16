@@ -156,11 +156,26 @@ EOF
 
 cat > $VIEWS_TEMPLATE <<EOF
 from django.http import JsonResponse
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from rest_framework import status
 import datetime
 
+@api_view(['GET', 'POST'])
 def signin(request):
+    if request.method == 'GET':
+        date = datetime.datetime.now()
+        return JsonResponse({"token": date},safe=False)
+    if request.method == 'POST':
+        return Response(request.data, status=status.HTTP_201_CREATED)
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def getme(request, id):
     date = datetime.datetime.now()
-    return JsonResponse({"token": date},safe=False)
+    if request.method == 'GET':
+        return JsonResponse({f'token of {id}': date})
+    if request.method == 'PUT':
+        return JsonResponse({})
 EOF
 
 cat > $URLS_TEMPLATE <<EOF
@@ -185,7 +200,8 @@ from  $PROJECT_NAME_SRC.views import auth
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('auth/', auth.signin)
+    path('auth/', auth.signin),
+    path('auth/<int:id>', auth.getme)
 ]
 EOF
 
